@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -8,6 +9,8 @@ import (
 	"runtime"
 	"sync"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	"../../gustavlsouz/btchistory/conf"
 	"../../gustavlsouz/btchistory/scraper"
@@ -19,12 +22,34 @@ func main() {
 	// load confs
 	configuration, _ := conf.LoadConf()
 
-	log.Printf("\nDB conf:\nuser:%s\npassword:%s\nFrequency:%s\nCores:%d\n\n",
+	log.Printf("\nDB conf:\ndbname:%s\nuser:%s\npassword:%s\nFrequency:%s\nCores:%d\n\n",
+		configuration.DB["dbname"],
 		configuration.DB["user"], configuration.DB["passwd"],
 		configuration.Freq, configuration.Core)
 
 	// number core
-	runtime.GOMAXPROCS(configuration.Core)
+	numCPU := runtime.NumCPU()
+	if configuration.Core <= numCPU {
+		runtime.GOMAXPROCS(configuration.Core)
+	} else {
+		runtime.GOMAXPROCS(numCPU)
+	}
+
+	var stringConnection = configuration.DB["user"] + ":" + configuration.DB["passwd"] + "@/" + configuration.DB["dbname"] + "?charset=utf8"
+	db, err := sql.Open("mysql", stringConnection)
+	utils.CheckErr(err)
+	defer db.Close()
+
+	// testing connection
+	rows, err := db.Query("select nm_currency from btchist.currency")
+	utils.CheckErr(err)
+
+	for rows.Next() {
+		var currency string
+		err := rows.Scan(&currency)
+		utils.ShowErr(err)
+		log.Println(currency)
+	}
 
 	// scrap
 	var controle sync.WaitGroup

@@ -1,10 +1,9 @@
 {
     "db" : {
-        "user": "",
-        "passwd": ""
+        "user": "btchist",
+        "passwd": "",
+        "dbname": "btchist"
     },
-    "freq" : {
-        "value": "10s"
-    },
+    "freq" : "10s",
     "core" : 2
 }
