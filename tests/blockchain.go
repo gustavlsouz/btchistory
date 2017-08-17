@@ -9,14 +9,14 @@ import (
 
 type JSONBlockchain struct {
 	USD map[string]interface{} `json:"USD"`
-	AUD map[string]interface{} `json:"AUD"`
 	BRL map[string]interface{} `json:"BRL"`
+	EUR map[string]interface{} `json:"EUR"`
+	/*AUD map[string]interface{} `json:"AUD"`
 	CAD map[string]interface{} `json:"CAD"`
 	CHF map[string]interface{} `json:"CHF"`
 	CLP map[string]interface{} `json:"CLP"`
 	CNY map[string]interface{} `json:"CNY"`
 	DKK map[string]interface{} `json:"DKK"`
-	EUR map[string]interface{} `json:"EUR"`
 	GBP map[string]interface{} `json:"GBP"`
 	HKD map[string]interface{} `json:"HKD"`
 	INR map[string]interface{} `json:"INR"`
@@ -29,7 +29,7 @@ type JSONBlockchain struct {
 	SEK map[string]interface{} `json:"SEK"`
 	SGD map[string]interface{} `json:"SGD"`
 	THB map[string]interface{} `json:"THB"`
-	TWD map[string]interface{} `json:"TWD"`
+	TWD map[string]interface{} `json:"TWD"`*/
 }
 
 var link = "https://blockchain.info/pt/ticker"

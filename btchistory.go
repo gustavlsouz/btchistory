@@ -29,8 +29,8 @@ func main() {
 	configuration := Configuration{}
 	err := decoder.Decode(&configuration)
 	utils.CheckErr(err, "erro na realizacao de decode das configurações...")
-	log.Printf("\nDB conf:\nuser:%s\npassword:%s\nFrequency:\n%s : %s\nCores:%d\n\n",
-		configuration.DB["user"], configuration.DB["passwd"], configuration.Freq["time"],
+	log.Printf("\nDB conf:\nuser:%s\npassword:%s\nFrequency:%s\nCores:%d\n\n",
+		configuration.DB["user"], configuration.DB["passwd"],
 		configuration.Freq["value"], configuration.Core)
 
 	// number core
@@ -40,24 +40,17 @@ func main() {
 	var controle sync.WaitGroup
 
 	controle.Add(1)
-	go taskBTCCheck(configuration.Freq["time"], configuration.Freq["value"], &controle)
+	go taskBTCCheck(configuration.Freq["value"], &controle)
 
 	controle.Wait()
 }
 
-func taskBTCCheck(timeType string, value string, controle *sync.WaitGroup) {
+func taskBTCCheck(value string, controle *sync.WaitGroup) {
 	defer controle.Done()
 
 	dolarHojeLink := "http://dolarhoje.com/bitcoin-hoje/"
 	var timeToWait time.Duration
-
-	if timeType == "sec" {
-		timeToWait, _ = time.ParseDuration(value + "s")
-	} else if timeType == "min" {
-		timeToWait, _ = time.ParseDuration(value + "m")
-	} else if timeType == "hour" {
-		timeToWait, _ = time.ParseDuration(value + "h")
-	}
+	timeToWait, _ = time.ParseDuration(value)
 
 	// scraping
 	for true {

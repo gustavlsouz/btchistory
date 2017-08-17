@@ -4,8 +4,7 @@
         "passwd": ""
     },
     "freq" : {
-        "time" : "sec",
-        "value": "10"
+        "value": "10s"
     },
     "core" : 2
 }

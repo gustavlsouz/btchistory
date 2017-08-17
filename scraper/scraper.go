@@ -3,7 +3,6 @@ package scraper
 import (
 	// import standard libraries
 
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -27,12 +26,7 @@ func PostScrape(linkAlvo string, conteudoParaProcurar string, attribute string) 
 	utils.CheckErr(erro, "erro ao carregar pagina "+linkAlvo)
 	log.Printf("Page " + linkAlvo + " loaded successfully")
 	resultadoDaBusca := conteudoHTML.Find(conteudoParaProcurar).Map(func(index int, item *goquery.Selection) string {
-		var bitValue string
-		if attribute == "contents" {
-			bitValue = fmt.Sprintln(item.Contents())
-		} else {
-			bitValue, _ = item.Attr(attribute)
-		}
+		bitValue, _ := item.Attr(attribute)
 
 		return bitValue
 	})
