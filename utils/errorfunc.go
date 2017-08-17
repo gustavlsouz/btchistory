@@ -7,3 +7,9 @@ func CheckErr(erro error, msg ...string) {
 		log.Fatal(erro, msg)
 	}
 }
+
+func ShowErr(erro error, msg ...string) {
+	if erro != nil {
+		log.Println(erro, msg)
+	}
+}
