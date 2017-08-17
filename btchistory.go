@@ -11,14 +11,9 @@ import (
 
 	"../../gustavlsouz/btchistory/conf"
 	"../../gustavlsouz/btchistory/scraper"
+	"../../gustavlsouz/btchistory/structs"
 	"../../gustavlsouz/btchistory/utils"
 )
-
-type JSONBlockchain struct {
-	USD map[string]interface{} `json:"USD"`
-	BRL map[string]interface{} `json:"BRL"`
-	EUR map[string]interface{} `json:"EUR"`
-}
 
 func main() {
 	// load confs
@@ -72,8 +67,8 @@ func taskBlockchain(timeToWait time.Duration, controle *sync.WaitGroup) {
 	}
 }
 
-func getJSONBlockchain(body []byte) (*JSONBlockchain, error) {
-	var JSONModel = new(JSONBlockchain)
+func getJSONBlockchain(body []byte) (*structs.JSONBlockchain, error) {
+	var JSONModel = new(structs.JSONBlockchain)
 	err := json.Unmarshal(body, &JSONModel)
 	if err != nil {
 		log.Println(err, "Erro na leitura de JSON")
