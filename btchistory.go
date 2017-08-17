@@ -45,10 +45,10 @@ func main() {
 	utils.CheckErr(err)
 
 	for rows.Next() {
-		var currency string
-		err := rows.Scan(&currency)
+		var currency structs.Currency
+		err := rows.Scan(&currency.Nmmode)
 		utils.ShowErr(err)
-		log.Println(currency)
+		log.Println(currency.Nmmode)
 	}
 
 	// scrap
