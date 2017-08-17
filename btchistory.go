@@ -19,7 +19,7 @@ type Configuration struct {
 }
 
 var (
-	confFile = "conf.json"
+	confFile = "conf/conf.json"
 )
 
 func main() {
