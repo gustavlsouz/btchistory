@@ -1,0 +1,11 @@
+{
+    "db" : {
+        "user": "",
+        "passwd": ""
+    },
+    "freq" : {
+        "time" : "sec", // "sec" "min" "hour" 
+        "value": "10"
+    },
+    "core" : 2
+}

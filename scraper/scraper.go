@@ -3,6 +3,7 @@ package scraper
 import (
 	// import standard libraries
 
+	"log"
 	"strconv"
 	"strings"
 
@@ -20,9 +21,10 @@ func NewCotacao() *Cotacao {
 }
 
 func PostScrape(linkAlvo string, conteudoParaProcurar string, attribute string) *Cotacao {
+	log.Printf("loading %s", linkAlvo)
 	conteudoHTML, erro := goquery.NewDocument(linkAlvo)
-	utils.CheckErr(erro)
-
+	utils.CheckErr(erro, "erro ao carregar pagina"+linkAlvo)
+	log.Printf("Page " + linkAlvo + " loaded successfully")
 	resultadoDaBusca := conteudoHTML.Find(conteudoParaProcurar).Map(func(index int, item *goquery.Selection) string {
 		bitValue, _ := item.Attr(attribute)
 		return bitValue
