@@ -1,37 +1,22 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
-	"os"
 	"runtime"
 	"sync"
 	"time"
 
+	"../../gustavlsouz/btchistory/conf"
 	"../../gustavlsouz/btchistory/scraper"
-	"../../gustavlsouz/btchistory/utils"
-)
-
-type Configuration struct {
-	DB   map[string]string
-	Freq map[string]string
-	Core int
-}
-
-var (
-	confFile = "conf/conf.json"
 )
 
 func main() {
 	// load confs
-	file, _ := os.Open(confFile)
-	decoder := json.NewDecoder(file)
-	configuration := Configuration{}
-	err := decoder.Decode(&configuration)
-	utils.CheckErr(err, "erro na realizacao de decode das configurações...")
+	configuration, _ := conf.LoadConf()
+	
 	log.Printf("\nDB conf:\nuser:%s\npassword:%s\nFrequency:%s\nCores:%d\n\n",
 		configuration.DB["user"], configuration.DB["passwd"],
-		configuration.Freq["value"], configuration.Core)
+		configuration.Freq, configuration.Core)
 
 	// number core
 	runtime.GOMAXPROCS(configuration.Core)
@@ -40,7 +25,7 @@ func main() {
 	var controle sync.WaitGroup
 
 	controle.Add(1)
-	go taskBTCCheck(configuration.Freq["value"], &controle)
+	go taskBTCCheck(configuration.Freq, &controle)
 
 	controle.Wait()
 }

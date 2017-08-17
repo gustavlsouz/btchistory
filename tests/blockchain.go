@@ -4,9 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
+/*
+{
+	"USD" : {"15m" : 4467.64, "last" : 4467.64, "buy" : 4468.12, "sell" : 4467.15, "symbol" : "$"},
+	"BRL" : {"15m" : 14114.51, "last" : 14114.51, "buy" : 14116.04, "sell" : 14112.97, "symbol" : "R$"},
+	"EUR" : {"15m" : 3844.74, "last" : 3844.74, "buy" : 3851.86, "sell" : 3837.61, "symbol" : "€"},
+}
+*/
 type JSONBlockchain struct {
 	USD map[string]interface{} `json:"USD"`
 	BRL map[string]interface{} `json:"BRL"`
@@ -34,13 +42,13 @@ type JSONBlockchain struct {
 
 var link = "https://blockchain.info/pt/ticker"
 
-func getStations(body []byte) (*JSONBlockchain, error) {
-	var s = new(JSONBlockchain)
-	err := json.Unmarshal(body, &s)
+func getJSONBlockchain(body []byte) (*JSONBlockchain, error) {
+	var JSONModel = new(JSONBlockchain)
+	err := json.Unmarshal(body, &JSONModel)
 	if err != nil {
-		fmt.Println("whoops:", err)
+		log.Println(err, "Erro na leitura de JSON")
 	}
-	return s, err
+	return JSONModel, err
 }
 
 func main() {
@@ -55,6 +63,6 @@ func main() {
 		panic(err.Error())
 	}
 
-	s, err := getStations([]byte(body))
-	fmt.Println(s.BRL["last"])
+	json, err := getJSONBlockchain([]byte(body))
+	fmt.Println(json.BRL["last"])
 }
