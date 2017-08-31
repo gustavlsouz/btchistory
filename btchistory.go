@@ -57,7 +57,8 @@ func main() {
 	var timeToWait time.Duration
 	timeToWait, _ = time.ParseDuration(configuration.Freq)
 
-	controle.Add(2)
+	controle.Add(3)
+	go taskValorDolar(timeToWait, &controle)
 	go taskDolarHoje(timeToWait, &controle)
 	go taskBlockchain(timeToWait, &controle)
 	controle.Wait()
@@ -66,12 +67,12 @@ func main() {
 func taskDolarHoje(timeToWait time.Duration, controle *sync.WaitGroup) {
 	defer controle.Done()
 
-	dolarHojeLink := "http://dolarhoje.com/bitcoin-hoje/"
+	var dolarHojeLink = "http://dolarhoje.com/bitcoin-hoje/"
 
 	// scraping
 	for {
 		cotacao := scraper.PostScrape(dolarHojeLink, "#nacional", "value")
-		log.Printf("\n\t1BTC : R$%5.2f reais\n\t[%s]", cotacao.ValorReais, dolarHojeLink)
+		log.Printf("\n\t1BTC : R$%5.2f reais\n\t[%s]", cotacao.Valor, dolarHojeLink)
 		time.Sleep(timeToWait)
 	}
 }
@@ -99,4 +100,15 @@ func getJSONBlockchain(body []byte) (*structs.JSONBlockchain, error) {
 		log.Println(err, "Erro na leitura de JSON")
 	}
 	return JSONModel, err
+}
+
+func taskValorDolar(timeToWait time.Duration, controle *sync.WaitGroup) {
+	defer controle.Done()
+	var linkDolar = "http://dolarhoje.com/"
+
+	for {
+		valorDolar := scraper.PostScrape(linkDolar, "#nacional", "value")
+		log.Printf("\n\tDolar: R$%5.2f reais\n\t[http://dolarhoje.com/]", valorDolar.Valor)
+		time.Sleep(timeToWait)
+	}
 }

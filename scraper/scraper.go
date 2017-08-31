@@ -13,7 +13,7 @@ import (
 )
 
 type Cotacao struct {
-	ValorReais float64
+	Valor float64
 }
 
 func NewCotacao() *Cotacao {
@@ -35,7 +35,7 @@ func PostScrape(linkAlvo string, conteudoParaProcurar string, attribute string) 
 		return NewCotacao()
 	}
 	cotacao := NewCotacao()
-	cotacao.ValorReais, _ = strconv.ParseFloat(strings.Replace(resultadoDaBusca[0], ",", ".", -1), 64)
+	cotacao.Valor, _ = strconv.ParseFloat(strings.Replace(resultadoDaBusca[0], ",", ".", -1), 64)
 	return cotacao
 
 }
